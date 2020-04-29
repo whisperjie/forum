@@ -22,7 +22,13 @@ public class User {
     public User() {
     }
 
-    public long getId() {
+    public User(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
+
+    public Integer getId() {
         return id;
     }
 
