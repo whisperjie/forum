@@ -3,6 +3,7 @@ package com.whisper.forum.controller;
 
 import com.whisper.forum.dao.UserDao;
 import com.whisper.forum.entity.User;
+import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,71 +24,95 @@ public class UserController {
     }
 
     @RequestMapping("/add")
-    public String add(User user) {
-        try {
-            userService.save(user);
-            return "插入成功";
-        } catch (Exception e) {
+    public ResponseResult add(User user) {
+
+        ResponseResult result=null;
+        try{
+            User newUser=userService.save(user);
+            result= ResponseResult.SUCCESS();
+            result.setData(user);
+        }catch (Exception e){
+            result= ResponseResult.FAILED();
             e.printStackTrace();
-            return "插入失败";
         }
+        return result;
 
     }
 
     @RequestMapping("/update")
-    public String update(User user) {
-        try {
-            userService.update(user);
-            return "更新成功";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "更新失败";
+    public ResponseResult update(User user) {
+        User newuser=userService.update(user);
+        ResponseResult result=null;
+        if (newuser!=null){
+            result= ResponseResult.SUCCESS();
+            result.setData(user);
+        }else{
+            result= ResponseResult.NOFOUND();
         }
+        return result;
     }
 
-    @RequestMapping("/findByNameOrEmail")
-    public User findByNameOrEmail(String name, String email) {
-        return userService.findByNameOrEmail(name, email);
+    @RequestMapping("/findByEmail")
+    public ResponseResult findByEmail(String email) {
+        User user=userService.findByEmail(email);
+        ResponseResult result=null;
+        if (user!=null){
+            result= ResponseResult.SUCCESS();
+            result.setData(user);
+        }else{
+            result= ResponseResult.NOFOUND();
+        }
+        return result;
     }
 
     @RequestMapping("/login")
-    public int login(String email, String password) {
+    public ResponseResult login(String email, String password) {
         //  return userService.findByNameOrEmail(name,email);
         User user = userDao.findByEmail(email);
-        int message =2;
+        //int message =2;
+        ResponseResult result=null;
         if (user == null) {
-            message= 1;
+            //message= 1;
+            result=ResponseResult.NOFOUND();
         } else if (user.password.equals(password)) {
-            message= 0;
+            result=ResponseResult.LOGIN_SUCCESS();
         }else{
-            message=2;
+            result=ResponseResult.FAILED();
         }
-        return message;
+        return result;
     }
 
     @RequestMapping("/id/{id}")
-    public User findById(@PathVariable Integer id) {
-        return userService.findById(id);
+    public ResponseResult findById(@PathVariable Integer id) {
+        User user=userService.findById(id);
+        ResponseResult result=null;
+        if (user!=null){
+            result= ResponseResult.SUCCESS();
+            result.setData(user);
+        }else{
+            result= ResponseResult.NOFOUND();
+        }
+        return result;
     }
 
     @RequestMapping("/delete/id/{id}")
-    public String deleteById(@PathVariable Integer id) {
+    public ResponseResult deleteById(@PathVariable Integer id) {
         try {
             userService.deleteById(id);
-            return "删除成功";
+            return ResponseResult.SUCCESS();
         } catch (Exception e) {
-            return "删除失败";
+            return ResponseResult.FAILED();
         }
 
     }
 
     @RequestMapping("/delete/all")
-    public String deleteAll() {
+    public ResponseResult deleteAll() {
         try {
             userService.deleteAll();
-            return "删除成功";
+            return ResponseResult.SUCCESS();
         } catch (Exception e) {
-            return "删除失败";
+            return ResponseResult.FAILED();
         }
 
     }

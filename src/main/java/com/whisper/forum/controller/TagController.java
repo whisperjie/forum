@@ -2,6 +2,7 @@ package com.whisper.forum.controller;
 
 
 import com.whisper.forum.entity.Tag;
+import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +16,12 @@ public class TagController {
     @Autowired
     TagServiceImpl tagService;
     @RequestMapping("/add")
-    public String add(Tag tag){
+    public ResponseResult add(Tag tag){
         try{
         tagService.addTag(tag);
-        return "添加成功";
+        return ResponseResult.SUCCESS();
         }catch (Exception e){
-            return "添加失败";
+            return ResponseResult.FAILED();
         }
     }
     @RequestMapping("/all")

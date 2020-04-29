@@ -4,54 +4,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
-    public String author;//作者
-   // public String title;
+    public int authorId;//作者
+    public int tagId;
+    //public int type;//0  文本，1 Markdown，2富文本
+    //public int status;//0 发布,1 草稿  ,2.等待发布
+    public int viewCount;
     public String content;//内容 html
+    public String publishTime;
+    // public Date updateTime;
 
-    public Article() {
-    }
-
-    public Article(String author, String content) {
-        this.author = author;
-        this.content = content;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", author='" + author + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 }
