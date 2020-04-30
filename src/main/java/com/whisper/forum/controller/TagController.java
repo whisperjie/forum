@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("tag")
+@RequestMapping("/tag")
 public class TagController {
     @Autowired
     TagServiceImpl tagService;
@@ -27,5 +27,14 @@ public class TagController {
     @RequestMapping("/all")
     public List<Tag> getAll(){
         return tagService.findAll();
+    }
+    @RequestMapping("/delete")
+    public ResponseResult delete(int id){
+        try{
+            tagService.delete(id);
+            return ResponseResult.SUCCESS();
+        }catch (Exception e){
+            return ResponseResult.FAILED();
+        }
     }
 }

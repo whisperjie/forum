@@ -13,10 +13,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+
+
     @Override
-    public User findByEmail(String email) {
-        System.out.println(userDao.findByEmail(email));
-        return userDao.findByEmail(email);
+    public List<User> findByName(String name) {
+        List<User> users = userDao.findByNameLike(name);
+        System.out.println(users.toString());
+        return users;
     }
 
     @Override

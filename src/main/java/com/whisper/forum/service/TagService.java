@@ -7,5 +7,6 @@ import java.util.List;
 public interface TagService {
     Tag addTag(Tag tag);
     List<Tag> findAll();
+    void delete(int id);
 
 }

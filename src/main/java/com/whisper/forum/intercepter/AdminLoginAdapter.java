@@ -30,6 +30,8 @@ public class AdminLoginAdapter implements WebMvcConfigurer {
         loginRegister.addPathPatterns("/**");
         loginRegister.excludePathPatterns("/root/login");
         loginRegister.excludePathPatterns("/user/**");
+        loginRegister.excludePathPatterns("/tag/**");
+        loginRegister.excludePathPatterns("/article/**");
         loginRegister.excludePathPatterns("/root/loginout");
         // 排除资源请求
         loginRegister.excludePathPatterns("/css/**");

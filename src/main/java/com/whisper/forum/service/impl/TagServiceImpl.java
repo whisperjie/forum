@@ -22,4 +22,9 @@ public class TagServiceImpl implements TagService {
     public List<Tag> findAll() {
         return tagDao.findAll();
     }
+
+    @Override
+    public void delete(int id) {
+        tagDao.deleteById(id);
+    }
 }

@@ -6,7 +6,9 @@ import com.whisper.forum.entity.User;
 import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -52,14 +54,22 @@ public class UserController {
         }
         return result;
     }
+    @RequestMapping("/handle")
+    public ModelAndView handle() {
+        System.out.println("handle");
+        ModelAndView modelAndView=new ModelAndView("user");
 
-    @RequestMapping("/findByEmail")
-    public ResponseResult findByEmail(String email) {
-        User user=userService.findByEmail(email);
+        modelAndView.addObject("users",userDao.findAll());
+        return modelAndView;
+    }
+    @RequestMapping("/findByName")
+    public ResponseResult findByEmail(String name) {
+        List<User> users=userService.findByName("%"+name+"%");
+        System.out.println(users.toString());
         ResponseResult result=null;
-        if (user!=null){
+        if (users!=null){
             result= ResponseResult.SUCCESS();
-            result.setData(user);
+            result.setData(users);
         }else{
             result= ResponseResult.NOFOUND();
         }

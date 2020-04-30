@@ -20,9 +20,18 @@ import java.io.IOException;
 @RequestMapping("/root")
 public class RootController {
     @RequestMapping("/home")
-    public ModelAndView index(HttpServletRequest request){
+    public ModelAndView home(HttpServletRequest request){
         String str= (String) request.getSession().getAttribute("isLogin");
         System.out.println("session form home>>>>>"+str);
+        ModelAndView modelAndView=new ModelAndView("home");
+        modelAndView.addObject("isLogined",str);
+        return modelAndView;
+
+    }
+    @RequestMapping("/")
+    public ModelAndView index(HttpServletRequest request){
+        String str= (String) request.getSession().getAttribute("isLogin");
+        System.out.println("session form index>>>>>"+str);
         ModelAndView modelAndView=new ModelAndView("home");
         modelAndView.addObject("isLogined",str);
         return modelAndView;

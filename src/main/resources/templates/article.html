@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script rel="stylesheet" src="/js/jquery.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="#">forum后台</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">用户管理</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">标签管理</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">文章管理</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">评论管理</a>
+        </li>
+
+    </ul>
+    <ul class="ml-auto navbar-nav">
+        <li class="nav-item ml-auto">
+            <a class="nav-link" href="#">root</a>
+        </li>
+        <li class="nav-item ml-auto">
+            <a class="nav-link" href="/root/loginout">退出</a>
+        </li>
+    </ul>
+</nav>
+<div class="container" style="margin-top: 100px;">
+
+    <!-- <div th:text="${users}">
+
+     </div>-->
+
+    <input  id="keyword" type="text" class="form-control"  placeholder="Enter name">
+    <button type="submit" class="btn btn-primary" onclick="searchByName()">搜索</button>
+    <button type="submit" class="btn btn-primary" onclick="add()">添加</button>
+
+
+    <table id="mytable" class="table-striped w-75">
+        <tr>
+            <td>序号</td>
+            <td>id</td>
+            <td>内容</td>
+            <td>hot</td>
+            <td>介绍</td>
+            <td>文章数</td>
+            <td>修改</td>
+            <td>删除</td>
+        </tr>
+        <tr th:each="article,Stat:${articles}">
+            <td th:text="${Stat.index+1}"></td>
+            <td th:text="${article.id}"></td>
+            <td th:text="${article.email}"></td>
+            <td th:text="${article.name}"></td>
+            <td th:text="${article.password}"></td>
+            <td>
+                <button class="btn-block" onclick="dododo()">修改</button>
+            </td>
+            <!--th:href="@{/user/delete/id/{id}(id=${user.id})}"-->
+            <td>
+                <button th:onclick="'javascript:dodelete('+${user.id}+')'" onclick="">删除</button>
+            </td>
+        </tr>
+
+    </table>
+</div>
+</body>
+<script>
+    function searchByName() {
+        var name = $("#keyword").val();
+        console.log(name);
+        $("#mytable tr:not(:first)").empty();
+        $.ajax({
+            url: "/user/findByName",
+            dataType: "json",
+            type: "GET",
+            data: {
+                name: name
+            },
+            success: function (res) {
+                console.log(res)
+                $.each(res.data,function (i,item) {
+                    var str=`
+                    <tr>
+            <td>${i+1}</td>
+            <td>${item.id}</td>
+            <td>${item.email}</td>
+            <td>${item.name}</td>
+            <td>${item.password}</td>
+            <td>
+                <button class="btn-block" onclick="dododo()">修改</button>
+            </td>
+            <!--th:href="@{/user/delete/id/{id}(id=${item.id})}"-->
+                    <td>
+                    <button th:onclick="'javascript:dodelete('+${item.id}+')'" onclick="">删除</button>
+                    </td>
+                    </tr>
+                    `
+                    $("#mytable").append(str)
+                })
+            }
+
+        })
+
+    }
+    function dodelete(id) {
+        $.ajax({
+            url: "/user/delete/id/" + id,
+            dataType: "json",
+            type: "GET",
+            success: function (res) {
+                console.log(res)
+                $.each(res,function (i,item) {
+                    var str = `<tr><td>${i + 1}</td>
+                <td>${item.id}</td>
+                <td>${item.artists[0].name}</td>
+                <td><button onclick="play(${item.id})">play</button></td>
+                <td><a href="play.html?id=${item.id}">进入详情</a></td></tr>`
+                $("#mytable").append(str)
+                })
+            }
+
+        })
+    }
+
+    function add() {
+        //var id =prompt("输入id:");
+        var name = prompt("输入名称:");
+        var email = prompt("输入邮箱:");
+        var password = prompt("输入密码:");
+        $.ajax({
+            url: "/user/update",
+            dataType: "json",
+            type: "GET",
+            data: {
+                name: name,
+                password: password,
+                email: email
+                //   id:id
+            },
+            success: function (res) {
+                console.log(res)
+                if (res.message = "操作成功") {
+                    alert("添加成功")
+                    window.location.reload()
+                } else {
+                    alert("修改失败")
+                }
+            }
+
+        })
+
+    }
+
+    function update() {
+        var id = prompt("输入id:");
+        var name = prompt("输入名称:");
+        var email = prompt("输入邮箱:");
+        var password = prompt("输入密码:");
+        $.ajax({
+            url: "/user/update",
+            dataType: "json",
+            type: "GET",
+            data: {
+                name: name,
+                password: password,
+                email: email,
+                id: id
+            },
+            success: function (res) {
+                console.log(res)
+                if (res.message = "操作成功") {
+                    alert("修改成功")
+                    window.location.reload()
+                } else {
+                    alert("修改失败")
+                }
+            }
+
+        })
+
+    }
+</script>
+</html>
