@@ -2,7 +2,6 @@ package com.whisper.forum.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.scene.input.DataFormat;
 import lombok.Data;
 
 import javax.persistence.*;

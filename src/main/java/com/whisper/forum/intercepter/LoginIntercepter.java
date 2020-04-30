@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginIntercepter implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object user=request.getSession().getAttribute("user");
-        if (user==null){
+        Object o=request.getSession().getAttribute("isLogin");
+        if (o==null){
             request.setAttribute("message","没有权限");
-            request.getRequestDispatcher("/show_error").forward(request,response);
+            //request.getRequestDispatcher("/show_error").forward(request,response);
+            response.sendRedirect("/root/login");
             return false;
         }else{
             return true;
