@@ -1,5 +1,6 @@
 package com.whisper.forum.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,12 +11,12 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Entity
-//@Data
+@Data
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
-    public int UserId=0;
+//    public int UserId=0;
     public String title="";//标题
     public int viewCount=0;
     public String content="无";//内容 html
@@ -28,21 +29,26 @@ public class Article {
     }
     public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
+    }*/
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "article_id",referencedColumnName = "id")
     //  @OrderBy("sequence asc")
+    //@JsonIgnore //生成json的时候忽略这个属性
     public List<Comment> comments=new ArrayList<>();
+
+
 
 
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
     @JoinColumn(name="user_id")//设置在article表中的关联字段(外键)
+    @JsonIgnore //生成json的时候忽略这个属性
     private User user;//所属作者
 
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
     @JoinColumn(name="tag_id")//设置在article表中的关联字段(外键)
-    private Tag tag;//所属作者*/
+    @JsonIgnore //生成json的时候忽略这个属性
+    private Tag tag;//所属作者
 
     public Article() {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -59,13 +65,7 @@ public class Article {
         this.id = id;
     }
 
-    public int getUserId() {
-        return UserId;
-    }
 
-    public void setUserId(int userId) {
-        UserId = userId;
-    }
 
     public String getTitle() {
         return title;
@@ -99,15 +99,5 @@ public class Article {
         this.publishTime = publishTime;
     }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", UserId=" + UserId +
-                ", title='" + title + '\'' +
-                ", viewCount=" + viewCount +
-                ", content='" + content + '\'' +
-                ", publishTime='" + publishTime + '\'' +
-                '}';
-    }
+
 }

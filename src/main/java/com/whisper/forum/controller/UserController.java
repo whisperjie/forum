@@ -18,6 +18,7 @@ public class UserController {
     @Autowired
     private UserDao userDao;
 
+
     @GetMapping("/all")
     public List<User> findAll() {
         return userService.findAll();

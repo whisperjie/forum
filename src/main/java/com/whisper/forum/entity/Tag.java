@@ -18,7 +18,6 @@ public class Tag {
     public Integer sum=0;//文章数
     public boolean hot=false;//就问你hot不hot
 
-/*
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "tag_id",referencedColumnName = "id")
@@ -31,7 +30,6 @@ public class Tag {
         this.sum = sum;
         this.hot = hot;
     }
-*/
 
     @Override
     public String toString() {
