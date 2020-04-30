@@ -3,10 +3,9 @@ package com.whisper.forum.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,8 +15,14 @@ public class Tag {
     public Integer id;
     public String content;//内容
     public String intro;//简介
-    public Integer sum;//文章数
+    public Integer sum=0;//文章数
     public boolean hot;//就问你hot不hot
+
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tag_id",referencedColumnName = "id")
+    //  @OrderBy("sequence asc")
+    public List<Article> articles=new ArrayList<>();
 
     public Tag(String content, String intro, Integer sum, boolean hot) {
         this.content = content;

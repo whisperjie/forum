@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -18,6 +20,17 @@ public class User {
     @Column(unique = true)
     public String name;
     public String password;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
+  //  @OrderBy("sequence asc")
+    public List<Article> articles=new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    //  @OrderBy("sequence asc")
+    public List<Comment> comments=new ArrayList<>();
+
 
     public User() {
     }

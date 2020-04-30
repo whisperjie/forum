@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CommentService {
+public interface CommentService {
 
-    List<CommentVO> results=new ArrayList<>();
+   void save();
+    void find(int articleId,int replyUserId);
 }
