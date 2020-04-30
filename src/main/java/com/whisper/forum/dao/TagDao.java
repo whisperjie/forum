@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface TagDao extends JpaSpecificationExecutor<Tag>,JpaRepository<Tag,Integer> {
-    List<Tag> findAllByOrderBySumDesc(); //令人抓狂的写法
+   // List<Tag> findAllByOrderBySumDesc(); //令人抓狂的写法
 
 }
