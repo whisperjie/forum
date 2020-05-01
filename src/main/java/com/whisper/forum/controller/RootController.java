@@ -1,7 +1,15 @@
 package com.whisper.forum.controller;
 
 import com.whisper.forum.cofig.ConfigProperties;
+import com.whisper.forum.dao.CommentDao;
+import com.whisper.forum.dao.TagDao;
+import com.whisper.forum.dao.UserDao;
+import com.whisper.forum.service.TagService;
+import com.whisper.forum.service.impl.ArticleServiceImpl;
+import com.whisper.forum.service.impl.TagServiceImpl;
+import com.whisper.forum.service.impl.UserServiceImpl;
 import org.hibernate.query.criteria.internal.predicate.NegatedPredicateWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -19,6 +27,19 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/root")
 public class RootController {
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    UserServiceImpl userService;
+    @Autowired
+    TagDao tagDao;
+    @Autowired
+    TagServiceImpl tagService;
+    @Autowired
+    ArticleServiceImpl articleService;
+    @Autowired
+    CommentDao commentDao;
+
     @RequestMapping("/home")
     public ModelAndView home(HttpServletRequest request){
         String str= (String) request.getSession().getAttribute("isLogin");
@@ -27,6 +48,46 @@ public class RootController {
         modelAndView.addObject("isLogined",str);
         return modelAndView;
 
+    }
+
+    @RequestMapping("/user/handle")
+    public ModelAndView userHandle() {
+        System.out.println("handle");
+        ModelAndView modelAndView=new ModelAndView("user");
+
+        modelAndView.addObject("users",userDao.findAll());
+       // System.out.println("tag>>>>>>>>>>>>>"+userService.findAll().toString());
+        return modelAndView;
+    }
+    //@RequestMapping("/handle#")
+    @RequestMapping("/tag/handle")
+    public ModelAndView handle() {
+        //System.out.println("handle");
+        ModelAndView modelAndView=new ModelAndView("tag");
+
+        modelAndView.addObject("tags",tagService.findAll());
+        // System.out.println("tag>>>>>>>>>>>>>"+tagService.findAll().toString());
+        return modelAndView;
+    }
+    @RequestMapping("/comment/handle")
+    public ModelAndView commentHandle() {
+        System.out.println("handle");
+        ModelAndView modelAndView=new ModelAndView("comment");
+
+        modelAndView.addObject("comments",commentDao.findAll());
+        //System.out.println("comment>>>>>>>>>>>>>"+commentDao.findAll().toString());
+        return modelAndView;
+    }
+    //@RequestMapping("/handle#")
+    @RequestMapping("/article/handle")
+    public ModelAndView articleHandle() {
+        //System.out.println("handle");
+        ModelAndView modelAndView=new ModelAndView("article");
+
+        modelAndView.addObject("articles",articleService.queryArticles());
+        System.out.println("articles>>>>>>>>>>>>>"+articleService.queryArticles().toString());
+        // System.out.println("tag>>>>>>>>>>>>>"+tagService.findAll().toString());
+        return modelAndView;
     }
     @RequestMapping("/")
     public ModelAndView index(HttpServletRequest request){

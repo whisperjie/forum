@@ -8,19 +8,19 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <a class="navbar-brand" href="#">forum后台</a>
+    <a class="navbar-brand" href="/root/home">forum后台</a>
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link " href="#">用户管理</a>
+            <a class="nav-link" href="/root/user/handle">用户管理</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="#">标签管理</a>
+            <a class="nav-link" href="/root/tag/handle">标签管理</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">文章管理</a>
+            <a class="nav-link" href="/root/article/handle">文章管理</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">评论管理</a>
+            <a class="nav-link" href="/root/comment/handle">评论管理</a>
         </li>
 
     </ul>
@@ -39,34 +39,36 @@
 
      </div>-->
 
-    <input  id="keyword" type="text" class="form-control"  placeholder="Enter name">
-    <button type="submit" class="btn btn-primary" onclick="searchByName()">搜索</button>
-    <button type="submit" class="btn btn-primary" onclick="add()">添加</button>
+    <input  id="keyword" type="text" class="form-control"  placeholder="Enter Id">
+    <button type="submit" class="btn btn-primary" onclick="searchById()">搜索</button>
+    <!--<button type="submit" class="btn btn-primary" onclick="add()">添加</button>-->
 
 
-    <table id="mytable" class="table-striped w-75">
+    <table id="mytable" class="table-striped w-100">
         <tr>
             <td>序号</td>
             <td>id</td>
             <td>内容</td>
-            <td>hot</td>
-            <td>介绍</td>
-            <td>文章数</td>
-            <td>修改</td>
+            <td>层数</td>
+            <td>回复评论id</td>
+            <td>文章</td>
+            <td>评论人</td>
             <td>删除</td>
         </tr>
-        <tr th:each="user,userStat:${users}">
-            <td th:text="${userStat.index+1}"></td>
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.name}"></td>
-            <td th:text="${user.password}"></td>
-            <td>
-                <button class="btn-block" onclick="dododo()">修改</button>
-            </td>
+        <tr th:each="comment,stat:${comments}">
+            <td th:text="${stat.index+1}"></td>
+            <td th:text="${comment.id}"></td>
+            <td th:text="${comment.commentMsg}"></td>
+            <td th:text="${comment.level}"></td>
+            <td th:text="${comment.replyCommentId}"></td>
+            <td th:text="${comment.article.title}"></td>
+            <td th:text="${comment.user.name}"></td>
+           <!-- <td>
+                <button class="btn-block " th:onclick="'javascript:update('+${user.id}+')'">修改</button>
+            </td>-->
             <!--th:href="@{/user/delete/id/{id}(id=${user.id})}"-->
             <td>
-                <button th:onclick="'javascript:dodelete('+${user.id}+')'" onclick="">删除</button>
+                <button class="btn-block bg-danger" th:onclick="'javascript:dodelete('+${comment.id}+')'" onclick="">删除</button>
             </td>
         </tr>
 
@@ -74,9 +76,13 @@
 </div>
 </body>
 <script>
-    function searchByName() {
-        var name = $("#keyword").val();
-        console.log(name);
+    function searchById() {
+        var id = $("#keyword").val();
+       // var name = $("#keyword").val();
+        console.log(id);
+
+        window.location.href = `/comment/findById?id=${id}`;
+      /*  console.log(name);
         $("#mytable tr:not(:first)").empty();
         $.ajax({
             url: "/user/findByName",
@@ -96,96 +102,101 @@
             <td>${item.name}</td>
             <td>${item.password}</td>
             <td>
-                <button class="btn-block" onclick="dododo()">修改</button>
+                <button class="btn-block" onclick="update(${item.id})">修改</button>
             </td>
             <!--th:href="@{/user/delete/id/{id}(id=${item.id})}"-->
-                    <td>
-                    <button th:onclick="'javascript:dodelete('+${item.id}+')'" onclick="">删除</button>
-                    </td>
-                    </tr>
+            <td>
+                <button class="btn-block bg-danger" onclick="dodelete(${item.id})" onclick="">删除</button>
+            </td>
+        </tr>
                     `
                     $("#mytable").append(str)
                 })
             }
 
-        })
+        })*/
 
     }
-    function dodelete(id) {
-        $.ajax({
-            url: "/user/delete/id/" + id,
-            dataType: "json",
-            type: "GET",
-            success: function (res) {
-                console.log(res)
-                $.each(res,function (i,item) {
-                    var str = `<tr><td>${i + 1}</td>
-                <td>${item.id}</td>
-                <td>${item.artists[0].name}</td>
-                <td><button onclick="play(${item.id})">play</button></td>
-                <td><a href="play.html?id=${item.id}">进入详情</a></td></tr>`
-                $("#mytable").append(str)
-                })
+        function dodelete(id) {
+            var sure=window.confirm("are you sure?")
+            if(sure) {
+                $.ajax({
+                    url: "/comment/delete/id/" + id,
+                    dataType: "json",
+                    type: "GET",
+                    success: function (res) {
+                        // console.log(res)
+                        console.log(res)
+                        if (res.message = "操作成功") {
+                            alert("修改成功")
+                            window.location.reload()
+                        } else {
+                            alert("修改失败")
+                        }
+                    }
+
+                });
+            }else{
+                alert("已取消");
             }
+        }
 
-        })
-    }
-
-    function add() {
-        //var id =prompt("输入id:");
-        var name = prompt("输入名称:");
-        var email = prompt("输入邮箱:");
-        var password = prompt("输入密码:");
-        $.ajax({
-            url: "/user/update",
-            dataType: "json",
-            type: "GET",
-            data: {
-                name: name,
-                password: password,
-                email: email
-                //   id:id
-            },
-            success: function (res) {
-                console.log(res)
-                if (res.message = "操作成功") {
-                    alert("添加成功")
-                    window.location.reload()
-                } else {
-                    alert("修改失败")
+        function add() {
+            //var id =prompt("输入id:");
+            var name = prompt("输入名称:");
+            var email = prompt("输入邮箱:");
+            var password = prompt("输入密码:");
+            $.ajax({
+                url: "/user/update",
+                dataType: "json",
+                type: "GET",
+                data: {
+                    name: name,
+                    password: password,
+                    email: email
+                    //   id:id
+                },
+                success: function (res) {
+                    console.log(res)
+                    if (res.message = "操作成功") {
+                        alert("添加成功")
+                        window.location.reload()
+                    } else {
+                        alert("修改失败")
+                    }
                 }
-            }
 
-        })
+            })
 
-    }
+        }
 
-    function update() {
-        var id = prompt("输入id:");
-        var name = prompt("输入名称:");
-        var email = prompt("输入邮箱:");
-        var password = prompt("输入密码:");
-        $.ajax({
-            url: "/user/update",
-            dataType: "json",
-            type: "GET",
-            data: {
-                name: name,
-                password: password,
-                email: email,
-                id: id
-            },
-            success: function (res) {
-                console.log(res)
-                if (res.message = "操作成功") {
-                    alert("修改成功")
-                    window.location.reload()
-                } else {
-                    alert("修改失败")
+        function update(id) {
+            // var id = prompt("输入id:");
+            var name = prompt("输入名称:");
+            var email = prompt("输入邮箱:");
+            var password = prompt("输入密码:");
+            $.ajax({
+                url: "/user/update",
+                dataType: "json",
+                type: "GET",
+                data: {
+                    name: name,
+                    password: password,
+                    email: email,
+                    id: id
+                },
+                success: function (res) {
+                    console.log(res)
+                    if (res.message = "操作成功") {
+                        alert("修改成功")
+                        window.location.reload()
+                    } else {
+                        alert("修改失败")
+                    }
                 }
-            }
 
-        })
-    }
+            })
+
+        }
 </script>
 </html>

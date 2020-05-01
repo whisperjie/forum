@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
@@ -53,14 +53,6 @@ public class UserController {
             result= ResponseResult.NOFOUND();
         }
         return result;
-    }
-    @RequestMapping("/handle")
-    public ModelAndView handle() {
-        System.out.println("handle");
-        ModelAndView modelAndView=new ModelAndView("user");
-
-        modelAndView.addObject("users",userDao.findAll());
-        return modelAndView;
     }
     @RequestMapping("/findByName")
     public ResponseResult findByEmail(String name) {

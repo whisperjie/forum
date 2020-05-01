@@ -1,24 +1,31 @@
 package com.whisper.forum.controller;
 
+import com.whisper.forum.dao.ArticleDao;
 import com.whisper.forum.entity.Article;
 import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-@Controller
+@RestController
 @RequestMapping("/article")
 public class ArticleController {
     @Autowired
+    ArticleDao articleDao;
+    @Autowired
     private ArticleServiceImpl articleService;
 
-    @PostMapping("/add")
+    @GetMapping("/add")
     public ResponseResult add(Article article) {
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        article.publishTime=simpleDateFormat.format(new Date());
+        article.viewCount=0;//设置默认值
         ResponseResult result=null;
         try {
             articleService.addArticle(article);
@@ -28,7 +35,7 @@ public class ArticleController {
         }
         return result;
     }
-    @PostMapping("/all")
+    @RequestMapping("/all")
     public ResponseResult getAll(Article article) {
         ResponseResult result=null;
         try {
@@ -40,8 +47,19 @@ public class ArticleController {
         }
         return result;
     }
-    @GetMapping("/delete")
-    public ResponseResult delete(int id) {
+    @RequestMapping("/findByName")
+    public ModelAndView findByName(String name) {
+        //System.out.println("handle");
+        ModelAndView modelAndView=new ModelAndView("article");
+
+        modelAndView.addObject("articles",articleDao.findByTitleLike("%"+name+"%"));
+        System.out.println("articles>>>>>>>>>>>>>"+articleDao.findByTitleLike("%"+name+"%"));
+        // System.out.println("tag>>>>>>>>>>>>>"+tagService.findAll().toString());
+        return modelAndView;
+    }
+
+    @GetMapping("/delete/id/{id}")
+    public ResponseResult delete( @PathVariable int id) {
         ResponseResult result=null;
         try {
             articleService.deleteArticleById(id);
