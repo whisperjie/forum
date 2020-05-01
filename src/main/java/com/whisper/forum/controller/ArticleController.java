@@ -1,6 +1,9 @@
 package com.whisper.forum.controller;
 
+import com.whisper.forum.android.AArticle;
 import com.whisper.forum.dao.ArticleDao;
+import com.whisper.forum.dao.TagDao;
+import com.whisper.forum.dao.UserDao;
 import com.whisper.forum.entity.Article;
 import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.ArticleServiceImpl;
@@ -17,6 +20,10 @@ import java.util.*;
 public class ArticleController {
     @Autowired
     ArticleDao articleDao;
+    @Autowired
+    TagDao tagDao;
+    @Autowired
+    UserDao userDao;
     @Autowired
     private ArticleServiceImpl articleService;
 
@@ -47,6 +54,68 @@ public class ArticleController {
         }
         return result;
     }
+
+    @RequestMapping("/android/all")
+    public List<AArticle> getAllForAndroid() {
+        //ResponseResult result=null;
+        List<Article> articles=articleDao.findAllByOrderByPublishTimeDesc();
+        List<AArticle> myArticles=new ArrayList<>();
+        for (Article  a: articles) {
+            AArticle aArticle=new AArticle();
+            aArticle.id=a.id;
+            aArticle.title=a.title;
+            aArticle.content=a.content;
+            aArticle.viewCount=a.viewCount;
+            aArticle.tagId=a.tag.id;
+            aArticle.publishTime=a.publishTime;
+            aArticle.tagName=tagDao.findById(a.tag.id).get().content;
+            aArticle.userId=a.user.id;
+            aArticle.userName=userDao.findById(a.user.id).get().name;
+            myArticles.add(aArticle);
+        }
+        return myArticles;
+    }
+    @RequestMapping("/android/allForHot")
+    public List<AArticle> getAllForAndroidForHot() {
+        //ResponseResult result=null;
+        List<Article> articles=articleDao.findAllByOrderByViewCountDesc();
+        List<AArticle> myArticles=new ArrayList<>();
+        for (Article  a: articles) {
+            AArticle aArticle=new AArticle();
+            aArticle.id=a.id;
+            aArticle.title=a.title;
+            aArticle.content=a.content;
+            aArticle.viewCount=a.viewCount;
+            aArticle.tagId=a.tag.id;
+            aArticle.publishTime=a.publishTime;
+            aArticle.tagName=tagDao.findById(a.tag.id).get().content;
+            aArticle.userId=a.user.id;
+            aArticle.userName=userDao.findById(a.user.id).get().name;
+            myArticles.add(aArticle);
+        }
+        return myArticles;
+    }
+    @RequestMapping("/android/userid/{id}")
+    public List<AArticle> getAllForUserId(@PathVariable int id) {
+        //ResponseResult result=null;
+        List<Article> articles=articleDao.findAllByOrderByViewCountDesc();
+        List<AArticle> myArticles=new ArrayList<>();
+        for (Article  a: articles) {
+            AArticle aArticle=new AArticle();
+            aArticle.id=a.id;
+            aArticle.title=a.title;
+            aArticle.content=a.content;
+            aArticle.viewCount=a.viewCount;
+            aArticle.tagId=a.tag.id;
+            aArticle.publishTime=a.publishTime;
+            aArticle.tagName=tagDao.findById(a.tag.id).get().content;
+            aArticle.userId=a.user.id;
+            aArticle.userName=userDao.findById(a.user.id).get().name;
+            myArticles.add(aArticle);
+        }
+        return myArticles;
+    }
+
     @RequestMapping("/findByName")
     public ModelAndView findByName(String name) {
         //System.out.println("handle");

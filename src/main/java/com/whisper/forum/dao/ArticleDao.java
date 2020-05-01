@@ -10,5 +10,8 @@ import java.util.List;
 @Repository
 public interface ArticleDao extends JpaSpecificationExecutor<Article>, JpaRepository<Article, Integer> {
     List<Article> findByTitleLike(String title);
+    List<Article> findAllByOrderByViewCountDesc();
+    List<Article> findAllByOrderByPublishTimeDesc();
+   // List<Article> findAllByUser
     //List<Article> findAllByUser
 }

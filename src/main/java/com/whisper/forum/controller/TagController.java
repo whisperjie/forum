@@ -1,6 +1,7 @@
 package com.whisper.forum.controller;
 
 
+import com.whisper.forum.android.ATag;
 import com.whisper.forum.dao.TagDao;
 import com.whisper.forum.entity.Tag;
 import com.whisper.forum.response.ResponseResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -58,6 +60,23 @@ public class TagController {
     public List<Tag> getAll(){
         return tagService.findAll();
     }
+
+    @RequestMapping("/android/all")
+    public List<ATag> getAndroidAll(){
+        List<Tag> tags= tagService.findAll();
+        List<ATag> aTags=new ArrayList<>();
+        for (Tag  t:tags) {
+            ATag aTag=new ATag();
+            aTag.id=t.id;
+            aTag.content=t.content;
+            aTag.hot=t.hot;
+            aTag.intro=t.intro;
+            aTag.sum=t.sum;
+            aTags.add(aTag);
+        }
+        return aTags;
+    }
+
     @RequestMapping("/delete/id/{id}")
     public ResponseResult delete( @PathVariable int id){
         try{

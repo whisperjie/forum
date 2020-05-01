@@ -2,13 +2,12 @@ package com.whisper.forum.controller;
 
 
 import com.whisper.forum.dao.UserDao;
+import com.whisper.forum.android.AUser;
 import com.whisper.forum.entity.User;
 import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -68,21 +67,25 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping("/login")
-    public ResponseResult login(String email, String password) {
+    @RequestMapping("/android/login")
+    public AUser login(String email, String password) {
         //  return userService.findByNameOrEmail(name,email);
         User user = userDao.findByEmail(email);
+        if(user!=null){
+            return new AUser(user.id,user.name,user.password,user.email);
+        }
         //int message =2;
-        ResponseResult result=null;
+       /* ResponseResult result=null;
         if (user == null) {
             //message= 1;
             result=ResponseResult.NOFOUND();
         } else if (user.password.equals(password)) {
             result=ResponseResult.LOGIN_SUCCESS();
+            result.setData(user);
         }else{
             result=ResponseResult.FAILED();
-        }
-        return result;
+        }*/
+       return null;
     }
 
     @RequestMapping("/id/{id}")
