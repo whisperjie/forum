@@ -4,12 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 public class AUser {
         int id;
         String name;
         String password;
         String email;
+        List<AArticle> aArticles;
+
+    public List<AArticle> getaArticles() {
+        return aArticles;
+    }
+
+    public void setaArticles(List<AArticle> aArticles) {
+        this.aArticles = aArticles;
+    }
 
     public AUser() {
     }
@@ -55,11 +66,12 @@ public class AUser {
 
     @Override
     public String toString() {
-        return "AndroidUser{" +
+        return "AUser{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", aArticles=" + aArticles +
                 '}';
     }
 }

@@ -1,11 +1,15 @@
 package com.whisper.forum.android;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ATag {
     public Integer id;
     public String content="无";//内容
     public String intro="无";//简介
     public Integer sum=0;//文章数
     public boolean hot=false;//就问你hot不hot
+    List<AArticle> aArticles=new ArrayList<>();
 
     public ATag() {
     }

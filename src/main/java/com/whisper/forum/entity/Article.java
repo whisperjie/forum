@@ -19,6 +19,8 @@ public class Article {
     public int id;
     public String title="";//标题
     public int viewCount=0;
+    public int commentCount=0;
+    public int visable=0;//0 全局可见  1 好友可见 2 仅自己可见
     public String content="无";//内容 html
     public String publishTime;
 

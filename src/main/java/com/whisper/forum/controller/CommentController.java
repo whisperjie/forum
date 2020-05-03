@@ -1,6 +1,8 @@
 package com.whisper.forum.controller;
 
+import com.whisper.forum.dao.ArticleDao;
 import com.whisper.forum.dao.CommentDao;
+import com.whisper.forum.dao.UserDao;
 import com.whisper.forum.entity.Comment;
 import com.whisper.forum.response.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    ArticleDao articleDao;
     @Autowired
     CommentDao commentDao;
     @RequestMapping("/all")
@@ -27,9 +36,31 @@ public class CommentController {
     public ResponseResult delete(@PathVariable int id){
         try{
             commentDao.deleteById(id);
-            return ResponseResult.SUCCESS();        }catch (Exception e){
+            return ResponseResult.SUCCESS();
+        }catch (Exception e){
             return ResponseResult.FAILED();
         }
+    }
+    @RequestMapping("androidAdd")
+    public ResponseResult addForAndroid(String commentMsg,int articleId,int userId){
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        Comment comment=new Comment();
+        comment.createdTime=simpleDateFormat.format(new Date());
+        comment.commentMsg=commentMsg;
+        comment.level=0;//直接默认全部都一级评论
+        comment.article.viewCount+=1; //这个为什么不行
+        comment.replyCommentId=0;
+        comment.user=userDao.findById(userId).get();
+        comment.article=articleDao.findById(articleId).get();
+        ResponseResult result=null;
+        try {
+            commentDao.save(comment);
+            result= ResponseResult.SUCCESS();
+        } catch (Exception e) {
+            result= ResponseResult.FAILED();
+        }
+        return result;
     }
     @RequestMapping("/findById")
     public ModelAndView findById(Integer id){
