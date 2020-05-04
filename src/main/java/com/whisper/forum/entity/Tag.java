@@ -19,8 +19,8 @@ public class Tag {
     public boolean hot=false;//就问你hot不hot
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tag_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "tag_id",referencedColumnName = "id",updatable=false)
     //  @OrderBy("sequence asc")
     public List<Article> articles=new ArrayList<>();
 

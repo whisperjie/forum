@@ -118,6 +118,7 @@ public class ArticleController {
                 aArticle.comments.add(aComment);
             }
             myArticles.add(aArticle);
+            aArticle.commentCount=aArticle.comments.size();
         }
         return myArticles;
     }
@@ -178,10 +179,15 @@ public class ArticleController {
     public ResponseResult delete( @PathVariable int id) {
         ResponseResult result=null;
         try {
-            articleService.deleteArticleById(id);
+            Article article = articleDao.getOne(id);
+            //List<Comment> comments = article.getComments();
+           // article.getComments().remove(comments);
+            articleDao.delete(article);
+           // articleService.deleteArticleById(id);
             result= ResponseResult.SUCCESS();
         } catch (Exception e) {
             result= ResponseResult.FAILED();
+            e.printStackTrace();
         }
         return result;
     }

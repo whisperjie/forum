@@ -24,8 +24,8 @@ public class Article {
     public String content="无";//内容 html
     public String publishTime;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "article_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.REMOVE ,fetch = FetchType.EAGER)
+    @JoinColumn(name = "article_id",referencedColumnName = "id",updatable=false)
     public List<Comment> comments=new ArrayList<>();
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
     @JoinColumn(name="user_id")//设置在article表中的关联字段(外键)

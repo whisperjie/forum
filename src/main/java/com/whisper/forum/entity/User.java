@@ -23,17 +23,17 @@ public class User {
     public String name;
     public String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name="user_id",updatable=false)
     public List<Focus> focusList=new ArrayList<>();
     //public Set<User> focuses=new TreeSet<>(); //关注列表
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id",referencedColumnName = "id",updatable=false)
   //  @OrderBy("sequence asc")
     public List<Article> articles=new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id",referencedColumnName = "id",updatable=false)
     //  @OrderBy("sequence asc")
     public List<Comment> comments=new ArrayList<>();
 
