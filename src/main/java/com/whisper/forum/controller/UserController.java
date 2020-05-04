@@ -1,8 +1,13 @@
 package com.whisper.forum.controller;
 
 
+import com.whisper.forum.android.AArticle;
+import com.whisper.forum.android.AFocus;
 import com.whisper.forum.dao.UserDao;
 import com.whisper.forum.android.AUser;
+import com.whisper.forum.entity.Article;
+import com.whisper.forum.entity.Comment;
+import com.whisper.forum.entity.Focus;
 import com.whisper.forum.entity.User;
 import com.whisper.forum.response.ResponseResult;
 import com.whisper.forum.service.impl.UserServiceImpl;
@@ -71,9 +76,24 @@ public class UserController {
     public AUser login(String email, String password) {
         //  return userService.findByNameOrEmail(name,email);
         User user = userDao.findByEmail(email);
+        AUser aUser=new AUser();
         if(user!=null){
-            return new AUser(user.id,user.name,user.password,user.email);
+         //  aUser.id=user.id;
+           //aUser.id=user.
+            aUser.id=user.id;
+            aUser.email=user.email;
+            aUser.name=user.name;
+            aUser.password=user.password;
+            for(Focus c:user.focusList){
+                AFocus aFocus=new AFocus();
+                aFocus.id=c.id;
+                aFocus.userId=c.user.id;
+                aFocus.userFriendId=c.userFriendId;
+                aUser.focusList.add(aFocus);
+            }
+            return aUser;
         }
+        return null;
         //int message =2;
        /* ResponseResult result=null;
         if (user == null) {
@@ -85,7 +105,7 @@ public class UserController {
         }else{
             result=ResponseResult.FAILED();
         }*/
-       return null;
+       //return null;
     }
 
     @RequestMapping("/id/{id}")

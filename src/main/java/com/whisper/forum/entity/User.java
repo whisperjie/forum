@@ -22,6 +22,10 @@ public class User {
     @Column(unique = true)
     public String name;
     public String password;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id")
+    public List<Focus> focusList=new ArrayList<>();
     //public Set<User> focuses=new TreeSet<>(); //关注列表
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",referencedColumnName = "id")

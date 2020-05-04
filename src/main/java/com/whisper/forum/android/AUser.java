@@ -4,22 +4,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class AUser {
-        int id;
-        String name;
-        String password;
-        String email;
-        List<AArticle> aArticles;
+        public int id;
+    public    String name;
+    public   String password;
+    public   String email;
+    public    List<AArticle> articles=new ArrayList<>();
+    public    List<AFocus> focusList=new ArrayList<>();
+    //public List<AComment> comments;
 
-    public List<AArticle> getaArticles() {
-        return aArticles;
-    }
-
-    public void setaArticles(List<AArticle> aArticles) {
-        this.aArticles = aArticles;
+    @Override
+    public String toString() {
+        return "AUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
     public AUser() {
@@ -64,14 +69,4 @@ public class AUser {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "AUser{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", aArticles=" + aArticles +
-                '}';
-    }
 }
