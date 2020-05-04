@@ -45,14 +45,18 @@ public class CommentController {
     public ResponseResult addForAndroid(String commentMsg,int articleId,int userId){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+
         Comment comment=new Comment();
+        comment.article=articleDao.getOne(articleId);
+
         comment.createdTime=simpleDateFormat.format(new Date());
         comment.commentMsg=commentMsg;
         comment.level=0;//直接默认全部都一级评论
-        comment.article.viewCount+=1; //这个为什么不行
+
         comment.replyCommentId=0;
         comment.user=userDao.findById(userId).get();
-        comment.article=articleDao.findById(articleId).get();
+        //comment.article=articleDao.findById(articleId).get();
+        comment.article.viewCount+=1; //这个为什么不行
         ResponseResult result=null;
         try {
             commentDao.save(comment);
