@@ -17,12 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class AdminLoginAdapter implements WebMvcConfigurer {
 
-    /*@Bean
-    public LoginIntercepter getLoginIntercepter() {
-    return new LoginIntercepter();
-    }
-*/
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         LoginIntercepter loginIntercepter=new LoginIntercepter();
@@ -40,9 +34,5 @@ public class AdminLoginAdapter implements WebMvcConfigurer {
         loginRegister.excludePathPatterns("/css/**");
         loginRegister.excludePathPatterns("/js/**");
         loginRegister.excludePathPatterns("/image/**");
-
-        /* registry.addInterceptor(getLoginIntercepter()).addPathPatterns("/root/**").excludePathPatterns("/root/login");
-  */
-
     }
 }

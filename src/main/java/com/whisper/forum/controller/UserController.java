@@ -33,13 +33,13 @@ public class UserController {
     @RequestMapping("/add")
     public ResponseResult add(User user) {
 
-        ResponseResult result=null;
-        try{
-            User newUser=userService.save(user);
-            result= ResponseResult.SUCCESS();
+        ResponseResult result = null;
+        try {
+            User newUser = userService.save(user);
+            result = ResponseResult.SUCCESS();
             result.setData(user);
-        }catch (Exception e){
-            result= ResponseResult.FAILED();
+        } catch (Exception e) {
+            result = ResponseResult.FAILED();
             e.printStackTrace();
         }
         return result;
@@ -48,47 +48,81 @@ public class UserController {
 
     @RequestMapping("/update")
     public ResponseResult update(User user) {
-        User newuser=userService.update(user);
-        ResponseResult result=null;
-        if (newuser!=null){
-            result= ResponseResult.SUCCESS();
+        User newuser = userService.update(user);
+        ResponseResult result = null;
+        if (newuser != null) {
+            result = ResponseResult.SUCCESS();
             result.setData(user);
-        }else{
-            result= ResponseResult.NOFOUND();
+        } else {
+            result = ResponseResult.NOFOUND();
         }
         return result;
     }
+    @RequestMapping("/android/update")
+    public ResponseResult androidUpdate(String email,String password) {
+       // User newuser = userService.update(user);
+        User user=userDao.findByEmail(email);
+
+        ResponseResult result = null;
+        if (user != null) {
+            user.password=password;
+            userDao.save(user);
+            result = ResponseResult.SUCCESS();
+            result.setData(user);
+        } else {
+            result = ResponseResult.NOFOUND();
+        }
+        return result;
+    }
+
     @RequestMapping("/findByName")
     public ResponseResult findByEmail(String name) {
-        List<User> users=userService.findByName("%"+name+"%");
+        List<User> users = userService.findByName("%" + name + "%");
         System.out.println(users.toString());
-        ResponseResult result=null;
-        if (users!=null){
-            result= ResponseResult.SUCCESS();
+        ResponseResult result = null;
+        if (users != null) {
+            result = ResponseResult.SUCCESS();
             result.setData(users);
-        }else{
-            result= ResponseResult.NOFOUND();
+        } else {
+            result = ResponseResult.NOFOUND();
         }
         return result;
     }
+
+    @RequestMapping("/android/register")
+    public String register(String email, String password) {
+        User user = new User();
+        user.email = email;
+        user.password = password;
+        ResponseResult responseResult = ResponseResult.FAILED();
+        try {
+            userDao.save(user);
+            responseResult = ResponseResult.SUCCESS();
+            return "注册成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "注册失败";
+    }
+
 
     @RequestMapping("/android/login")
     public AUser login(String email, String password) {
         //  return userService.findByNameOrEmail(name,email);
         User user = userDao.findByEmail(email);
-        AUser aUser=new AUser();
-        if(user!=null){
-         //  aUser.id=user.id;
-           //aUser.id=user.
-            aUser.id=user.id;
-            aUser.email=user.email;
-            aUser.name=user.name;
-            aUser.password=user.password;
-            for(Focus c:user.focusList){
-                AFocus aFocus=new AFocus();
-                aFocus.id=c.id;
-                aFocus.userId=c.user.id;
-                aFocus.userFriendId=c.userFriendId;
+        AUser aUser = new AUser();
+        if (user != null) {
+            //  aUser.id=user.id;
+            //aUser.id=user.
+            aUser.id = user.id;
+            aUser.email = user.email;
+            aUser.name = user.name;
+            aUser.password = user.password;
+            for (Focus c : user.focusList) {
+                AFocus aFocus = new AFocus();
+                aFocus.id = c.id;
+                aFocus.userId = c.user.id;
+                aFocus.userFriendId = c.userFriendId;
                 aUser.focusList.add(aFocus);
             }
             return aUser;
@@ -105,18 +139,18 @@ public class UserController {
         }else{
             result=ResponseResult.FAILED();
         }*/
-       //return null;
+        //return null;
     }
 
     @RequestMapping("/id/{id}")
     public ResponseResult findById(@PathVariable Integer id) {
-        User user=userService.findById(id);
-        ResponseResult result=null;
-        if (user!=null){
-            result= ResponseResult.SUCCESS();
+        User user = userService.findById(id);
+        ResponseResult result = null;
+        if (user != null) {
+            result = ResponseResult.SUCCESS();
             result.setData(user);
-        }else{
-            result= ResponseResult.NOFOUND();
+        } else {
+            result = ResponseResult.NOFOUND();
         }
         return result;
     }
